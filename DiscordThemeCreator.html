@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+
+<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+<meta content="utf-8" http-equiv="encoding">
+
+This is a program to create pseudo-themes for discord! Choose colors, then copy/paste the result into your discord console (Ctrl+Shift+I or CMD+Option+I) and you'll have it until you reload discord!
+
+<br>
+<br>
+
+<input type="button" id="reset" value="Reset Colors">
+<input type="color" id="--header-primary" value="#F0F0F0">
+<input type="color" id="--header-secondary" value="#b9bbbe">
+<input type="color" id="--text-normal" value="#DCDDDE">
+<input type="color" id="--text-muted" value="#72767D">
+<input type="color" id="--background-primary" value="#36393F">
+<input type="color" id="--background-secondary" value="#2F3136">
+<input type="color" id="--background-secondary-alt" value="#292B2F">
+<input type="color" id="--background-tertiary" value="#202225">
+<input type="color" id="--channeltextarea-background" value="#40444B">
+<input type="color" id="--channels-default" value="#8E9297">
+<input type="color" id="--interactive-normal" value="#B9BBBE">
+<input type="color" id="--interactive-hover" value="#DCDDDE">
+<input type="color" id="--interactive-active" value="#F0F0F0">
+<input type="color" id="--interactive-muted" value="#4F545C">
+<input type="color" id="--background-accent" value="#4F545C">
+<input type="color" id="--background-floating" value="#18191C">
+<input type="color" id="--textbox-markdown-syntax" value="#8E9297">
+<input type="color" id="--scrollbar-auto-thumb" value="#202225">
+<input type="color" id="--scrollbar-auto-track" value="#2E3338">
+
+<br>
+<br>
+
+<canvas id="c" width="500" height="400"></canvas>
+
+<br>
+
+<text id="output" style="white-space: pre;">
+var sheet = document.createElement('style')
+sheet.innerHTML = 
+`.theme-dark, .theme-light {
+	--header-primary: #F0F0F0;
+	--header-secondary: #B9BBBE;
+	--text-normal: #DCDDDE;
+	--text-muted: #72767D;
+	--background-primary: #36393F;
+	--background-secondary: #2F3136;
+	--background-secondary-alt: #292B2F;
+	--background-tertiary: #202225;
+	--channeltextarea-background: #40444B;
+	--channels-default: #8E9297;
+	--interactive-normal: #B9BBBE;
+	--interactive-hover: #DCDDDE;
+	--interactive-active: #F0F0F0;
+	--interactive-muted: #4F545C;
+	--background-accent: #4F545C;
+	--background-floating: #18191C;
+	--textbox-markdown-syntax: #8E9297;
+	--scrollbar-auto-thumb: #202225;
+	--scrollbar-auto-track: #2E3338;
+}`;
+document.body.appendChild(sheet);
+</text>
+
+<script>
+var header;
+var colors = {};
+colors["--header-primary"] = ["#F0F0F0"];
+colors["--header-secondary"] = ["#B9BBBE"];
+colors["--text-normal"] = ["#DCDDDE"];
+colors["--text-muted"] = ["#72767D"];
+colors["--background-primary"] = ["#36393F"];
+colors["--background-secondary"] = ["#2F3136"];
+colors["--background-secondary-alt"] = ["#292B2F"];
+colors["--background-tertiary"] = ["#202225"];
+colors["--channeltextarea-background"] = ["#40444B"];
+colors["--channels-default"] = ["#8E9297"];
+colors["--interactive-normal"] = ["#B9BBBE"];
+colors["--interactive-hover"] = ["#DCDDDE"];
+colors["--interactive-active"] = ["#F0F0F0"];
+colors["--interactive-muted"] = ["#4F545C"];
+colors["--background-accent"] = ["#4F545C"];
+colors["--background-floating"] = ["#18191C"];
+colors["--textbox-markdown-syntax"] = ["#8E9297"];
+colors["--scrollbar-auto-thumb"] = ["#202225"];
+colors["--scrollbar-auto-track"] = ["#2E3338"];
+var c;
+var ctx;
+var output;
+
+window.addEventListener("load", startup, false);
+
+function startup() {
+	c = document.getElementById("c");
+	ctx = c.getContext("2d");
+	reset = document.querySelector("#reset");
+	reset.addEventListener("click", resetColors);
+	output = document.querySelector("#output");
+	for (const [key, value] of Object.entries(colors)) {
+		input = document.querySelector("#"+key);
+		colors[key][0] = input.value;
+		input.addEventListener("input", updateAll, false);
+		input.addEventListener("change", updateAll, false);
+		input.addEventListener("change", result, false);
+		value.push(input);
+	}
+	result();
+	window.requestAnimationFrame(draw);
+}
+
+function resetColors(){
+	colors["--header-primary"] = ["#F0F0F0"];
+	colors["--header-secondary"] = ["#B9BBBE"];
+	colors["--text-normal"] = ["#DCDDDE"];
+	colors["--text-muted"] = ["#72767D"];
+	colors["--background-primary"] = ["#36393F"];
+	colors["--background-secondary"] = ["#2F3136"];
+	colors["--background-secondary-alt"] = ["#292B2F"];
+	colors["--background-tertiary"] = ["#202225"];
+	colors["--channeltextarea-background"] = ["#40444B"];
+	colors["--channels-default"] = ["#8E9297"];
+	colors["--interactive-normal"] = ["#B9BBBE"];
+	colors["--interactive-hover"] = ["#DCDDDE"];
+	colors["--interactive-active"] = ["#F0F0F0"];
+	colors["--interactive-muted"] = ["#4F545C"];
+	colors["--background-accent"] = ["#4F545C"];
+	colors["--background-floating"] = ["#18191C"];
+	colors["--textbox-markdown-syntax"] = ["#8E9297"];
+	colors["--scrollbar-auto-thumb"] = ["#202225"];
+	colors["--scrollbar-auto-track"] = ["#2E3338"];
+	for (const [key, value] of Object.entries(colors)) {
+		input = document.querySelector("#"+key);
+		input.value = colors[key][0];
+	}
+	result();
+}
+
+function draw(){
+	ctx.fillStyle = colors["--background-tertiary"][0];
+	ctx.beginPath();
+	ctx.rect(0, 0, 500, 400);
+	ctx.fill();
+	ctx.fillStyle = colors["--background-primary"][0];
+	ctx.beginPath();
+	ctx.rect(150, 10, 350, 390);
+	ctx.rect(10, 15, 30, 30);
+	ctx.rect(10, 75, 30, 30);
+	ctx.rect(10, 120, 30, 30);
+	ctx.fill();
+	ctx.fillStyle = colors["--background-secondary"][0];
+	ctx.beginPath();
+	ctx.rect(50, 10, 100, 390);
+	ctx.rect(400, 40, 100, 360);
+	ctx.fill();
+	ctx.fillStyle = colors["--background-secondary-alt"][0];
+	ctx.beginPath();
+	ctx.rect(50, 370, 100, 30);
+	ctx.fill();
+	ctx.fillStyle = colors["--background-tertiary"][0];
+	ctx.beginPath();
+	ctx.rect(400, 20, 60, 10);
+	ctx.fill();
+	ctx.fillStyle = colors["--header-primary"][0];
+	ctx.beginPath();
+	ctx.rect(75, 20, 50, 10);
+	ctx.rect(180, 20, 75, 10);
+	ctx.rect(75, 375, 30, 10);
+	ctx.fill();
+	ctx.fillStyle = colors["--header-secondary"][0];
+	ctx.beginPath();
+	ctx.rect(275, 20, 75, 10);
+	ctx.rect(75, 387, 20, 5);
+	ctx.fill();
+	ctx.fillStyle = colors["--channeltextarea-background"][0];
+	ctx.beginPath();
+	ctx.rect(160, 365, 230, 25);
+	ctx.fill();
+	ctx.fillStyle = colors["--text-normal"][0];
+	ctx.beginPath();
+	ctx.rect(175, 120, 75, 10);
+	ctx.rect(175, 160, 200, 10);
+	ctx.rect(175, 200, 175, 10);
+	ctx.rect(175, 240, 75, 10);
+	ctx.rect(175, 280, 25, 10);
+	ctx.rect(175, 320, 125, 10);
+	ctx.rect(200, 372, 10, 10);
+	ctx.rect(215, 372, 10, 10);
+	ctx.rect(245, 372, 10, 10);
+	ctx.fill();
+	ctx.fillStyle = colors["--text-muted"][0];
+	ctx.beginPath();
+	ctx.rect(250, 145, 50, 5);
+	ctx.fill();
+	ctx.fillStyle = colors["--background-floating"][0];
+	ctx.beginPath();
+	ctx.rect(160, 310, 100, 50);
+	ctx.fill();
+	ctx.fillStyle = colors["--channels-default"][0];
+	ctx.beginPath();
+	ctx.rect(65, 60, 50, 10);
+	ctx.rect(65, 140, 50, 10);
+	ctx.rect(65, 165, 80, 2);
+	ctx.rect(65, 260, 50, 10);
+	ctx.rect(410, 60, 50, 10);
+	ctx.rect(410, 100, 50, 10);
+	ctx.rect(410, 140, 50, 10);
+	ctx.rect(410, 180, 50, 10);
+	ctx.rect(410, 220, 50, 10);
+	ctx.fill();
+	ctx.fillStyle = colors["--interactive-normal"][0];
+	ctx.beginPath();
+	ctx.rect(355, 20, 10, 10);
+	ctx.rect(370, 20, 10, 10);
+	ctx.rect(465, 20, 10, 10);
+	ctx.rect(480, 20, 10, 10);
+	ctx.rect(135, 380, 10, 10);
+	ctx.rect(123, 380, 10, 10);
+	ctx.rect(111, 380, 10, 10);
+	ctx.rect(325, 370, 15, 15);
+	ctx.rect(345, 370, 15, 15);
+	ctx.rect(365, 370, 15, 15);
+	ctx.rect(480, 2, 6, 6);
+	ctx.rect(490, 2, 6, 6);
+	ctx.rect(125, 102, 6, 6);
+	ctx.rect(135, 102, 6, 6);
+	ctx.rect(170, 320, 10, 10);
+	ctx.rect(185, 322, 40, 5);
+	ctx.rect(170, 340, 10, 10);
+	ctx.rect(185, 342, 40, 5);
+	ctx.fill();
+	ctx.fillStyle = colors["--interactive-active"][0];
+	ctx.beginPath();
+	ctx.rect(65, 100, 50, 10);
+	ctx.rect(385, 20, 10, 10);
+	ctx.fill();
+	ctx.fillStyle = colors["--interactive-hover"][0];
+	ctx.beginPath();
+	ctx.rect(165, 370, 15, 15);
+	ctx.fill();
+	ctx.fillStyle = colors["--interactive-muted"][0];
+	ctx.beginPath();
+	ctx.rect(65, 180, 50, 10);
+	ctx.rect(52, 180, 10, 10);
+	ctx.rect(65, 220, 50, 10);
+	ctx.rect(52, 220, 10, 10);
+	ctx.fill();
+	ctx.fillStyle = colors["--scrollbar-auto-track"][0];
+	ctx.beginPath();
+	ctx.rect(390, 40, 8, 325);
+	ctx.fill();
+	ctx.fillStyle = colors["--scrollbar-auto-thumb"][0];
+	ctx.beginPath();
+	ctx.rect(390, 325, 8, 40);
+	ctx.fill();
+	ctx.fillStyle = colors["--background-accent"][0];
+	ctx.beginPath();
+	ctx.rect(60, 20, 10, 10);
+	ctx.fill();
+	ctx.fillStyle = colors["--textbox-markdown-syntax"][0];
+	ctx.beginPath();
+	ctx.rect(185, 372, 10, 10);
+	ctx.rect(230, 372, 10, 10);
+	ctx.fill();
+	window.requestAnimationFrame(draw);
+}
+
+function updateAll(event) {
+	colors[event.target.id][0] = event.target.value;
+}
+
+function result() {
+	output.textContent = "\nvar sheet = document.createElement('style');\nsheet.innerHTML = \n`.theme-dark, .theme-light {\n";
+	for (const [key, value] of Object.entries(colors)) {
+		output.textContent += "        " + key + ": " + colors[key][0].toUpperCase() + ";\n";
+	}
+	output.textContent += "}\`;\ndocument.body.appendChild(sheet);";
+}
+
+</script>
