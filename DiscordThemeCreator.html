@@ -9,25 +9,25 @@ This is a program to create pseudo-themes for discord! Choose colors, then copy/
 <br>
 
 <input type="button" id="reset" value="Reset Colors">
-<input type="color" id="--header-primary" value="#F0F0F0">
-<input type="color" id="--header-secondary" value="#b9bbbe">
-<input type="color" id="--text-normal" value="#DCDDDE">
-<input type="color" id="--text-muted" value="#72767D">
-<input type="color" id="--background-primary" value="#36393F">
-<input type="color" id="--background-secondary" value="#2F3136">
-<input type="color" id="--background-secondary-alt" value="#292B2F">
-<input type="color" id="--background-tertiary" value="#202225">
-<input type="color" id="--channeltextarea-background" value="#40444B">
-<input type="color" id="--channels-default" value="#8E9297">
-<input type="color" id="--interactive-normal" value="#B9BBBE">
-<input type="color" id="--interactive-hover" value="#DCDDDE">
-<input type="color" id="--interactive-active" value="#F0F0F0">
-<input type="color" id="--interactive-muted" value="#4F545C">
-<input type="color" id="--background-accent" value="#4F545C">
-<input type="color" id="--background-floating" value="#18191C">
-<input type="color" id="--textbox-markdown-syntax" value="#8E9297">
-<input type="color" id="--scrollbar-auto-thumb" value="#202225">
-<input type="color" id="--scrollbar-auto-track" value="#2E3338">
+<div class="tooltip"><input type="color" id="--header-primary" value="#F0F0F0"><span class="tooltiptext">--header-primary</span></div>
+<div class="tooltip"><input type="color" id="--header-secondary" value="#b9bbbe"><span class="tooltiptext">--header-secondary</span></div>
+<div class="tooltip"><input type="color" id="--text-normal" value="#DCDDDE"><span class="tooltiptext">--text-normal</span></div>
+<div class="tooltip"><input type="color" id="--text-muted" value="#72767D"><span class="tooltiptext">--text-muted</span></div>
+<div class="tooltip"><input type="color" id="--background-primary" value="#36393F"><span class="tooltiptext">--background-primary</span></div>
+<div class="tooltip"><input type="color" id="--background-secondary" value="#2F3136"><span class="tooltiptext">--background-secondary</span></div>
+<div class="tooltip"><input type="color" id="--background-secondary-alt" value="#292B2F"><span class="tooltiptext">--background-secondary-alt</span></div>
+<div class="tooltip"><input type="color" id="--background-tertiary" value="#202225"><span class="tooltiptext">--background-tertiary</span></div>
+<div class="tooltip"><input type="color" id="--channeltextarea-background" value="#40444B"><span class="tooltiptext">--channeltextarea-background</span></div>
+<div class="tooltip"><input type="color" id="--channels-default" value="#8E9297"><span class="tooltiptext">--channels-default</span></div>
+<div class="tooltip"><input type="color" id="--interactive-normal" value="#B9BBBE"><span class="tooltiptext">--interactive-normal</span></div>
+<div class="tooltip"><input type="color" id="--interactive-hover" value="#DCDDDE"><span class="tooltiptext">--interactive-hover</span></div>
+<div class="tooltip"><input type="color" id="--interactive-active" value="#F0F0F0"><span class="tooltiptext">--interactive-active</span></div>
+<div class="tooltip"><input type="color" id="--interactive-muted" value="#4F545C"><span class="tooltiptext">--interactive-muted</span></div>
+<div class="tooltip"><input type="color" id="--background-accent" value="#4F545C"><span class="tooltiptext">--background-accent</span></div>
+<div class="tooltip"><input type="color" id="--background-floating" value="#18191C"><span class="tooltiptext">--background-floating</span></div>
+<div class="tooltip"><input type="color" id="--textbox-markdown-syntax" value="#8E9297"><span class="tooltiptext">--textbox-markdown-syntax</span></div>
+<div class="tooltip"><input type="color" id="--scrollbar-auto-thumb" value="#202225"><span class="tooltiptext">--scrollbar-auto-thumb</span></div>
+<div class="tooltip"><input type="color" id="--scrollbar-auto-track" value="#2E3338"><span class="tooltiptext">--scrollbar-auto-track</span></div>
 
 <br>
 <br>
@@ -62,6 +62,38 @@ sheet.innerHTML =
 }`;
 document.body.appendChild(sheet);
 </text>
+
+<style>
+/* Tooltip container */
+.tooltip {
+  position: relative;
+  display: inline-block;
+  border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
+}
+
+/* Tooltip text */
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  top: 110%;
+  left: 50%;
+  margin-left: -60px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+ 
+  /* Position the tooltip text - see examples below! */
+  position: absolute;
+  z-index: 1;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+}
+</style>
 
 <script>
 var header;
@@ -270,11 +302,11 @@ function updateAll(event) {
 }
 
 function result() {
-	output.textContent = "\nvar sheet = document.createElement('style');\nsheet.innerHTML = \n`.theme-dark, .theme-light {\n";
+	output.textContent = "\nvar sheet = document.createElement('style');\nsheet.innerHTML = \n'.theme-dark, .theme-light {'+\n";
 	for (const [key, value] of Object.entries(colors)) {
-		output.textContent += "        " + key + ": " + colors[key][0].toUpperCase() + ";\n";
+		output.textContent += "        '" + key + ": " + colors[key][0].toUpperCase() + ";'+\n";
 	}
-	output.textContent += "}\`;\ndocument.body.appendChild(sheet);";
+	output.textContent += "'}';\ndocument.body.appendChild(sheet);";
 }
 
 </script>
