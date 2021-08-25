@@ -306,7 +306,14 @@ function result() {
 	for (const [key, value] of Object.entries(colors)) {
 		output.textContent += "        '" + key + ": " + colors[key][0].toUpperCase() + ";'+\n";
 	}
-	output.textContent += "'}';\ndocument.body.appendChild(sheet);";
+	output.textContent += "'}'+\n";
+	output.textContent += "'.theme-dark .container-1D34oG, .theme-light .container-1D34oG, .theme-dark .container-3ayLPN, .theme-light .container-3ayLPN, .theme-dark .uploadModal-2ifh8j, .theme-light .uploadModal-2ifh8j {'+\n"
+    output.textContent += "'background-color: "+colors["--background-primary"][0].toUpperCase()+";'+\n"
+	output.textContent += "'}'+\n";
+	output.textContent += "'.theme-dark .footer-3mqk7D, .theme-light .footer-3mqk7D {'+\n"
+    output.textContent += "'background-color: "+colors["--background-secondary"][0].toUpperCase()+";'+\n"
+	output.textContent += "'}';\n";
+	output.textContent += "document.body.appendChild(sheet);";
 }
 
 </script>
