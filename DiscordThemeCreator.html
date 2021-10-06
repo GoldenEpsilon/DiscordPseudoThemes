@@ -145,11 +145,11 @@ function startup() {
 	var i = 0;
 	for (const [key, value] of Object.entries(colors)) {
 		input = document.querySelector("#"+key);
-		colors[key][0] = input.value;
 		if(linkParams.get(i) != null){
-			colors[key][0] = "#"+linkParams.get(i);
+			input.value = "#"+linkParams.get(i);
 		}
 		i++;
+		colors[key][0] = input.value;
 		input.addEventListener("input", updateAll, false);
 		input.addEventListener("change", updateAll, false);
 		input.addEventListener("change", result, false);
