@@ -180,7 +180,7 @@ function resetColors(){
 	colors["--scrollbar-auto-thumb"] = ["#202225"];
 	colors["--scrollbar-auto-track"] = ["#2E3338"];
 	for (const [key, value] of Object.entries(colors)) {
-		input = document.querySelector(""+key);
+		input = document.querySelector("#"+key);
 		input.value = colors[key][0];
 	}
 	result();
