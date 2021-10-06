@@ -324,11 +324,8 @@ function result() {
 	output.textContent = "\nvar sheet = document.createElement('style');\nsheet.innerHTML = \n'.theme-dark, .theme-light {'+\n";
 	var i = 0;
 	for (const [key, value] of Object.entries(colors)) {
-		if(colors[key][0].charAt(4) != ""){
-			link.textContent += i + "=" + colors[key][0].charAt(1)+colors[key][0].charAt(3)+colors[key][0].charAt(5);
-		}else{
-			link.textContent += i + "=" + colors[key][0].charAt(1)+colors[key][0].charAt(2)+colors[key][0].charAt(3);
-		}
+		link.textContent += i + "=" + colors[key][0].replace(/\W/g, '');
+		if(link.textContent.length % 150 < 10){link.textContent += "          \n"}
 		i++;
 		if(i < Object.entries(colors).length){link.textContent += "&"}
 		output.textContent += "        '" + key + ": " + colors[key][0].toUpperCase() + ";'+\n";
