@@ -7,24 +7,34 @@ This is a program to create pseudo-themes for discord! Choose colors, then copy/
 
 <br>
 <br>
+Link to current theme to share:
+<br>
+<text id="link" style="white-space: pre;">https://goldenepsilon.github.io/DiscordPseudoThemes/DiscordThemeCreator.html</text>
+<br>
+<br>
 
 <input type="button" id="reset" value="Reset Colors">
-<div class="tooltip"><input type="color" id="--header-primary" value="#F0F0F0"><span class="tooltiptext">--header-primary</span></div>
-<div class="tooltip"><input type="color" id="--header-secondary" value="#b9bbbe"><span class="tooltiptext">--header-secondary</span></div>
-<div class="tooltip"><input type="color" id="--text-normal" value="#DCDDDE"><span class="tooltiptext">--text-normal</span></div>
-<div class="tooltip"><input type="color" id="--text-muted" value="#72767D"><span class="tooltiptext">--text-muted</span></div>
+<br>
+<br>
 <div class="tooltip"><input type="color" id="--background-primary" value="#36393F"><span class="tooltiptext">--background-primary</span></div>
 <div class="tooltip"><input type="color" id="--background-secondary" value="#2F3136"><span class="tooltiptext">--background-secondary</span></div>
 <div class="tooltip"><input type="color" id="--background-secondary-alt" value="#292B2F"><span class="tooltiptext">--background-secondary-alt</span></div>
 <div class="tooltip"><input type="color" id="--background-tertiary" value="#202225"><span class="tooltiptext">--background-tertiary</span></div>
-<div class="tooltip"><input type="color" id="--channeltextarea-background" value="#40444B"><span class="tooltiptext">--channeltextarea-background</span></div>
+<div class="tooltip"><input type="color" id="--background-accent" value="#4F545C"><span class="tooltiptext">--background-accent</span></div>
+<div class="tooltip"><input type="color" id="--background-floating" value="#18191C"><span class="tooltiptext">--background-floating</span></div>
+<br>
+<div class="tooltip"><input type="color" id="--header-primary" value="#F0F0F0"><span class="tooltiptext">--header-primary</span></div>
+<div class="tooltip"><input type="color" id="--header-secondary" value="#b9bbbe"><span class="tooltiptext">--header-secondary</span></div>
 <div class="tooltip"><input type="color" id="--channels-default" value="#8E9297"><span class="tooltiptext">--channels-default</span></div>
+<div class="tooltip"><input type="color" id="--text-normal" value="#DCDDDE"><span class="tooltiptext">--text-normal</span></div>
+<div class="tooltip"><input type="color" id="--text-muted" value="#72767D"><span class="tooltiptext">--text-muted</span></div>
+<br>
 <div class="tooltip"><input type="color" id="--interactive-normal" value="#B9BBBE"><span class="tooltiptext">--interactive-normal</span></div>
 <div class="tooltip"><input type="color" id="--interactive-hover" value="#DCDDDE"><span class="tooltiptext">--interactive-hover</span></div>
 <div class="tooltip"><input type="color" id="--interactive-active" value="#F0F0F0"><span class="tooltiptext">--interactive-active</span></div>
 <div class="tooltip"><input type="color" id="--interactive-muted" value="#4F545C"><span class="tooltiptext">--interactive-muted</span></div>
-<div class="tooltip"><input type="color" id="--background-accent" value="#4F545C"><span class="tooltiptext">--background-accent</span></div>
-<div class="tooltip"><input type="color" id="--background-floating" value="#18191C"><span class="tooltiptext">--background-floating</span></div>
+<br>
+<div class="tooltip"><input type="color" id="--channeltextarea-background" value="#40444B"><span class="tooltiptext">--channeltextarea-background</span></div>
 <div class="tooltip"><input type="color" id="--textbox-markdown-syntax" value="#8E9297"><span class="tooltiptext">--textbox-markdown-syntax</span></div>
 <div class="tooltip"><input type="color" id="--scrollbar-auto-thumb" value="#202225"><span class="tooltiptext">--scrollbar-auto-thumb</span></div>
 <div class="tooltip"><input type="color" id="--scrollbar-auto-track" value="#2E3338"><span class="tooltiptext">--scrollbar-auto-track</span></div>
@@ -120,6 +130,7 @@ colors["--scrollbar-auto-track"] = ["#2E3338"];
 var c;
 var ctx;
 var output;
+var link;
 
 window.addEventListener("load", startup, false);
 
@@ -129,9 +140,16 @@ function startup() {
 	reset = document.querySelector("#reset");
 	reset.addEventListener("click", resetColors);
 	output = document.querySelector("#output");
+	link = document.querySelector("#link");
+	var linkParams = new URLSearchParams(window.location.search);
+	var i = 0;
 	for (const [key, value] of Object.entries(colors)) {
 		input = document.querySelector("#"+key);
 		colors[key][0] = input.value;
+		if(linkParams.get(i) != null){
+			colors[key][0] = "#"+linkParams.get(i);
+		}
+		i++;
 		input.addEventListener("input", updateAll, false);
 		input.addEventListener("change", updateAll, false);
 		input.addEventListener("change", result, false);
@@ -162,7 +180,7 @@ function resetColors(){
 	colors["--scrollbar-auto-thumb"] = ["#202225"];
 	colors["--scrollbar-auto-track"] = ["#2E3338"];
 	for (const [key, value] of Object.entries(colors)) {
-		input = document.querySelector("#"+key);
+		input = document.querySelector(""+key);
 		input.value = colors[key][0];
 	}
 	result();
@@ -302,8 +320,17 @@ function updateAll(event) {
 }
 
 function result() {
+	link.textContent = "https://goldenepsilon.github.io/DiscordPseudoThemes/DiscordThemeCreator.html?";
 	output.textContent = "\nvar sheet = document.createElement('style');\nsheet.innerHTML = \n'.theme-dark, .theme-light {'+\n";
+	var i = 0;
 	for (const [key, value] of Object.entries(colors)) {
+		if(colors[key][0].charAt(4) != ""){
+			link.textContent += i + "=" + colors[key][0].charAt(1)+colors[key][0].charAt(3)+colors[key][0].charAt(5);
+		}else{
+			link.textContent += i + "=" + colors[key][0].charAt(1)+colors[key][0].charAt(2)+colors[key][0].charAt(3);
+		}
+		i++;
+		if(i < Object.entries(colors).length){link.textContent += "&"}
 		output.textContent += "        '" + key + ": " + colors[key][0].toUpperCase() + ";'+\n";
 	}
 	output.textContent += "'}'+\n";
